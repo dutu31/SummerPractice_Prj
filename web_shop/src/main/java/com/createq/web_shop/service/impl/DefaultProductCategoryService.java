@@ -19,4 +19,8 @@ public class DefaultProductCategoryService implements ProductCategoryService {
     public List<ProductCategoryModel> getAll() {
         return productCategoryRepository.findAll();
     }
+
+    public ProductCategoryRepository getProductCategoryRepository() {
+        return productCategoryRepository;
+    }
 }

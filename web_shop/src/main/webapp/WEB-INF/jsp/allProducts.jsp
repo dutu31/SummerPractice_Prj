@@ -7,13 +7,19 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div>
+<!-- TODO:sort by price implement !-->
+<div class="sort-container">
+    <label for="sortSelect">SortPrice</label>
+</div>
+<div class="products-grid">
     <c:forEach items="${products}" var="product">
-            <div>
-                <h2>${product.title}</h2>
-                <p>${product.description}</p>
-                <p><strong>Price: </strong> ${product.price} RON </p>
+            <div class="product-card">
                 <img src="${product.imageURL}" alt="${product.title}" width="200"/>
+                <div class="content">
+                <h2>${product.title}</h2>
+                <p class="description">${product.description}</p>
+                <p class="price">${product.price} RON </p>
+                </div>
             </div>
         </c:forEach>
 </div>

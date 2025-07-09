@@ -24,4 +24,8 @@ public class ProductCategoryController {
         model.addAttribute("categories",categories);
         return "index";
     }
+
+    public ProductCategoryFacade getProductCategoryFacade() {
+        return productCategoryFacade;
+    }
 }

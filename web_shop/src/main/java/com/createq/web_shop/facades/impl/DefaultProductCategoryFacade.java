@@ -24,4 +24,12 @@ public class DefaultProductCategoryFacade implements ProductCategoryFacade {
         List< ProductCategoryModel>productCategoryModelList=productCategorySerivce.getAll();
         return productCategoryConverter.convertAll(productCategoryModelList);
     }
+
+    public ProductCategoryService getProductCategorySerivce() {
+        return productCategorySerivce;
+    }
+
+    public ProductCategoryConverter getProductCategoryConverter() {
+        return productCategoryConverter;
+    }
 }

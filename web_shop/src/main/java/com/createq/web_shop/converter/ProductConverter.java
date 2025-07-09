@@ -15,6 +15,7 @@ public class ProductConverter {
         dto.setTitle(product.getTitle());
         dto.setDescription(product.getDescription());
         dto.setImageURL(product.getImageURL());
+        dto.setPrice(product.getPrice());
         if (product.getCategory() != null) {
             dto.setCategoryName(product.getCategory().getName());
         }

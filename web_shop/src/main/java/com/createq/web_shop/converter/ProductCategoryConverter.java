@@ -14,6 +14,8 @@ public class ProductCategoryConverter {
     public ProductCategoryConverter(ProductConverter productConverter) {
         this.productConverter = productConverter;
     }
+
+
     public ProductCategoryDTO convert(ProductCategoryModel productCategoryModel) {
         ProductCategoryDTO dto=new ProductCategoryDTO();
         dto.setId(productCategoryModel.getId());
@@ -27,5 +29,9 @@ public class ProductCategoryConverter {
         return productCategoryModelList.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
+    }
+
+    public ProductConverter getProductConverter() {
+        return productConverter;
     }
 }

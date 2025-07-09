@@ -1,23 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const links = document.querySelectorAll('.category-link');
-    const content = document.getElementById('content');
+    const categoryLinks = document.querySelectorAll('.category-link');
+    const mainContent = document.getElementById('content');
 
-    links.forEach(link => {
-        link.addEventListener('click', event => {
-            event.preventDefault();
-            const categoryId = link.getAttribute('data-id');
-
-            fetch(`/category/${categoryId}/products`)
-                .then(response => response.text())
-                .then(html => {
-                    content.innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error loading products:', error);
-                });
-        });
-    });
-    if(links.length>0) {
-        links[0].click();
+    function getProductsForCategory(event) {
+        event.preventDefault();
+        const categoryId=event.currentTarget.getAttribute('data-id');
+        fetchProductsByCategory(categoryId);
+        categoryLinks.forEach(link => link.classList.remove('active'));
+        event.currentTarget.classList.add('active');
     }
+
+    function fetchProductsByCategory(categoryId) {
+        fetch(`/category/${categoryId}/products`)
+            .then(response => response.text())
+            .then(html => {
+               updateMainContent(html);
+            })
+            .catch(error => {
+                console.error('Error loading products:', error);
+            });
+    }
+    function updateMainContent(html) {
+        mainContent.innerHTML=html;
+    }
+    function initCategoryLinks() {
+        categoryLinks.forEach(link => {
+            link.addEventListener('click',getProductsForCategory);
+        });
+    }
+    function selectDefaultCategory() {
+        if(categoryLinks.length>0) {
+            categoryLinks[0].click();
+    }
+    }
+    function sortByPrice() {
+
+    }
+
+    initCategoryLinks();
+    selectDefaultCategory();
 });
