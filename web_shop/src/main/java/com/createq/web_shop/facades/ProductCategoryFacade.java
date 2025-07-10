@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ProductCategoryFacade {
     List<ProductCategoryDTO> getAll();
+    ProductCategoryDTO getById(Long id);
 }

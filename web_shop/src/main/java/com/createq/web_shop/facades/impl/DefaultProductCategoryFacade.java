@@ -25,6 +25,15 @@ public class DefaultProductCategoryFacade implements ProductCategoryFacade {
         return productCategoryConverter.convertAll(productCategoryModelList);
     }
 
+    @Override
+    public ProductCategoryDTO getById(Long id) {
+    ProductCategoryModel productId=productCategorySerivce.getById(id);
+    if(productId==null) {
+        return null;
+    }
+    return productCategoryConverter.convert(productId);
+    }
+
     public ProductCategoryService getProductCategorySerivce() {
         return productCategorySerivce;
     }
@@ -32,4 +41,6 @@ public class DefaultProductCategoryFacade implements ProductCategoryFacade {
     public ProductCategoryConverter getProductCategoryConverter() {
         return productCategoryConverter;
     }
+
+
 }

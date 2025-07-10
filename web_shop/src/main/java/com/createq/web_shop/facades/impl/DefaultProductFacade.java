@@ -30,6 +30,19 @@ public class DefaultProductFacade implements ProductFacade {
         return productConverter.convertAll(products);
     }
 
+    @Override
+    public List<ProductDTO> getByCategoryOrderByPriceAsc(Long categoryId) {
+        List<ProductModel>products=productService.findByCategoryOrderByPriceAsc(categoryId);
+        return productConverter.convertAll(products);
+    }
+
+    @Override
+    public List<ProductDTO> getByCategoryOrderByPriceDesc(Long categoryId) {
+        List<ProductModel>products=productService.findByCategoryOrderByPriceDesc(categoryId);
+        return productConverter.convertAll(products);
+    }
+
+
     public ProductService getProductService() {
         return productService;
     }

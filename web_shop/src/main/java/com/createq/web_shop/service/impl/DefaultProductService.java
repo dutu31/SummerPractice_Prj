@@ -30,4 +30,14 @@ public class DefaultProductService implements ProductService {
     public List<ProductModel> getByCategoryId(Long id) {
         return productRepository.findByCategoryId(id);
     }
+
+    @Override
+    public List<ProductModel> findByCategoryOrderByPriceAsc(Long categoryId) {
+        return productRepository.findByCategoryIdOrderByPriceAsc(categoryId);
+    }
+
+    @Override
+    public List<ProductModel> findByCategoryOrderByPriceDesc(Long categoryId) {
+        return productRepository.findByCategoryIdOrderByPriceDesc(categoryId);
+    }
 }

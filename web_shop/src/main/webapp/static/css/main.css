@@ -117,3 +117,21 @@ footer {
     margin-top: 50px;
     min-height: 50px;
 }
+
+.error {
+    color:red;
+    text-align: center;
+    font-size:xxx-large;
+}
+
+.sort-container {
+    text-align: right;
+    margin-bottom: 20px;
+}
+.sort-container select {
+    padding: 10px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+}
+
