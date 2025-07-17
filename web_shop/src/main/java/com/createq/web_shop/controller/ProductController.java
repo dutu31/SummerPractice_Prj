@@ -5,6 +5,7 @@ import com.createq.web_shop.dto.ProductDTO;
 import com.createq.web_shop.facades.ProductCategoryFacade;
 import com.createq.web_shop.facades.ProductFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,25 @@ public class ProductController {
     public ProductController(ProductFacade productModelFacade, ProductCategoryFacade productCategoryFacade) {
         this.productModelFacade = productModelFacade;
         this.productCategoryFacade = productCategoryFacade;
+
     }
+
+    @GetMapping("/products")
+    public String getAllProducts(@RequestParam(required = false, name="sort") String sort, Model model) {
+        List<ProductDTO> products;
+        if("priceAsc".equalsIgnoreCase(sort)) {
+            products=productModelFacade.getAllByOrderByPriceAsc();
+        }
+        else if("priceDesc".equalsIgnoreCase(sort)) {
+            products=productModelFacade.getAllByOrderByPriceDesc();
+        }
+        else {
+            products=productModelFacade.getAll();
+        }
+        model.addAttribute("products", products);
+        return "allProducts";
+    }
+
     @GetMapping("/category/{id}/products")
     public String getProductsByCategory(@PathVariable Long id, @RequestParam(required = false,name="sort") String sort, Model model) {
         ProductCategoryDTO category=productCategoryFacade.getById(id);
@@ -50,6 +69,17 @@ public class ProductController {
         }
         return "allProducts";
     }
+
+    @GetMapping("/product/{id}/details")
+    public String getProductDetails(@PathVariable Long id, Model model) {
+        ProductDTO product = productModelFacade.getById(id);
+        if (product == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
+        model.addAttribute("product", product);
+        return "productDetails";
+    }
+
 
 
 

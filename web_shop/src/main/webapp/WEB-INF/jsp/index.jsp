@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="jakarta.tags.core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <%--
   Created by IntelliJ IDEA.
   User: dutu
@@ -9,14 +10,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link href="<c:url value="/static/css/main.css"/>" rel="stylesheet" type="text/css">
+    <link href="${contextPath}/static/css/main.css" rel="stylesheet" type="text/css">
     <title>Quick Phone</title>
 </head>
 <body>
     <header>
         <h1>QuickPhone</h1>
         <nav>
+
             <ul>
+                <li>
+                    <a href="#" class="category-link" data-id="ALL">All</a>
+                </li>
                 <c:forEach items="${categories}" var="category">
                     <li>
                         <a href="#" class="category-link" data-id="${category.id}">${category.name}</a>
@@ -34,6 +39,6 @@
         <p>&copy; QuickPhone 2025</p>
     </footer>
 
-    <script type="text/javascript" src="<c:url value='/static/script/main.js' />"></script>
+    <script type="text/javascript" src="${contextPath}/static/script/main.js"></script>
 </body>
 </html>

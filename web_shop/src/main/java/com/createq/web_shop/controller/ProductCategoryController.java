@@ -22,15 +22,12 @@ public class ProductCategoryController {
 
     @GetMapping("/")
     public String getAll(Model model) {
-        List<ProductCategoryDTO> categories=productCategoryFacade.getAll();
-        if(categories==null || categories.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"No categories found");
+        List<ProductCategoryDTO> categories = productCategoryFacade.getAll();
+        if (categories == null || categories.isEmpty()) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404), "No categories found");
         }
-        model.addAttribute("categories",categories);
+        model.addAttribute("categories", categories);
         return "index";
     }
 
-    public ProductCategoryFacade getProductCategoryFacade() {
-        return productCategoryFacade;
-    }
 }

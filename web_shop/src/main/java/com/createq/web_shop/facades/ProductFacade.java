@@ -10,4 +10,7 @@ public interface ProductFacade {
     List<ProductDTO>findByCategoryId(Long id);
     List<ProductDTO>getByCategoryOrderByPriceAsc(Long categoryId);
     List<ProductDTO>getByCategoryOrderByPriceDesc(Long categoryId);
+    ProductDTO getById(Long id);
+    List<ProductDTO>getAllByOrderByPriceAsc();
+    List<ProductDTO>getAllByOrderByPriceDesc();
 }
