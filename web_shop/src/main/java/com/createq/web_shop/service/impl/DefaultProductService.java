@@ -56,4 +56,5 @@ public class DefaultProductService implements ProductService {
     public List<ProductModel> findAllByOrderByPriceDesc() {
         return productRepository.findAllByOrderByPriceDesc();
     }
+
 }

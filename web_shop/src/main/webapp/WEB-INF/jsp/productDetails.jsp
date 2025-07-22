@@ -15,18 +15,34 @@
         <p><strong>Price:</strong> ${product.price} RON</p>
         <p><strong>In stock:</strong> ${product.quantity}</p>
 
-        <form id="addToCartForm">
-            <input type="number" name="quantity" value="1" min="1" max="${product.quantity}">
-            <button type="submit">Add to Cart</button>
+      <!--  <form id="addToCartForm"
+            data-id="${product.id}"
+            data-title="${product.title}"
+            data-price="${product.price}">
+            <input type="number" id="quantity" name="quantity" value="1" min="1" max="${product.quantity}">
+            <button type="submit" id="add-to-cart">Add to Cart</button>
         </form>
 
-        <p id="cartMessage"></p>
-        <a id="continueShopping" href="${pageContext.request.contextPath}/">Continue Shopping</a>
+        <p id="cartMessage" class="cart-message"></p>
+        <a id="continueShopping" href="${pageContext.request.contextPath}/">Continue Shopping</a>   !-->
 
-    </div>
+        <div class="add-to-cart-form">
+            <input type="number" id="quantity" value="1" min="1" max="${product.quantity}">
+            <button type="button" id="add-to-cart"
+                    data-id="${product.id}"
+                    data-title="${product.title}"
+                    data-price="${product.price}"
+                    data-image="${product.imageURL}">
+                Add to Cart
+            </button>
+        </div>
+        <p id="cartMessage"></p>
+
+
     <div class="product-image">
         <img src="${product.imageURL}" alt="${product.title}">
     </div>
 </div>
 
 
+</div>

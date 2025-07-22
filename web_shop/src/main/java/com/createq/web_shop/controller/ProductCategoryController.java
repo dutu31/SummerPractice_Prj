@@ -15,6 +15,7 @@ import java.util.List;
 public class ProductCategoryController {
     private final ProductCategoryFacade productCategoryFacade;
 
+
     @Autowired
     public ProductCategoryController(ProductCategoryFacade productCategoryFacade) {
         this.productCategoryFacade = productCategoryFacade;

@@ -8,15 +8,18 @@ const categoryService = (function () {
         initCategoryLinks(categoryLinks);
         initSortSelect(sortSelect,sortOrder);
         initProductLinks();
+        if (window.cartService && typeof cartService.initCart === 'function') {
+            cartService.initCart();
+        }
         const path = window.location.pathname;
-        if (path.startsWith("/product/")) {
-            const productId = path.split("/")[2];
-            fetchProductDetails(productId,false);
-        } else if (path.startsWith("/category/")) {
-            const categoryId = path.split("/")[2];
+        if (path.startsWith('/product/')) {
+            const productId = path.split('/')[2];
+            fetchProductDetails(productId);
+        } else if (path.startsWith('/category/')) {
+            const categoryId = path.split('/')[2];
             fetchProductsByCategory(categoryId, sortOrder);
-        } else if (path === "/products") {
-            fetchProductsByCategory("ALL",sortOrder);
+        } else if (path === '/products') {
+            fetchProductsByCategory('ALL', sortOrder);
         } else {
             selectDefaultCategory(categoryLinks);
         }
@@ -69,7 +72,12 @@ const categoryService = (function () {
                     }
                 }
                 console.log("Sort select reinjectat:", document.getElementById('sortSelect'));
+                if (window.cartService && typeof cartService.initCart === 'function') {
+                    cartService.initCart();
+                }
                 history.pushState({type:'category', categoryId, sortOrder, html }, null, url);
+
+
             })
             .catch(error => {
                 console.error('Error loading products:', error);
@@ -87,7 +95,11 @@ function fetchProductDetails(productId) {
         .then(html => {
             updateMainContent(html);
             clearActiveCategory();
+            if (window.cartService && typeof cartService.initCart === 'function') {
+                cartService.initCart();
+            }
             history.pushState({ type: 'product', productId, html }, null, url);
+
         })
         .catch(error => {
             updateMainContent(`<p style="color:red">${error.message}</p>`);
@@ -128,11 +140,12 @@ function fetchProductDetails(productId) {
     function initSortSelect(sortSelect, sortOrder) {
         if(sortSelect) {
             sortSelect.value=sortOrder || '';
-        }
+
 
         if (!sortSelect.dataset.listenerAttached) {
             sortSelect.addEventListener('change', handleSortChange);
             sortSelect.dataset.listenerAttached = "true";
+        }
         }
 
     }
