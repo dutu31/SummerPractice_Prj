@@ -4,9 +4,9 @@ import com.createq.web_shop.dto.ProductCategoryDTO;
 import com.createq.web_shop.dto.ProductDTO;
 import com.createq.web_shop.facades.ProductCategoryFacade;
 import com.createq.web_shop.facades.ProductFacade;
+import com.createq.web_shop.utils.ProductUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,44 +30,33 @@ public class ProductController {
 
     @GetMapping("/products")
     public String getAllProducts(@RequestParam(required = false, name="sort") String sort, Model model) {
-        List<ProductDTO> products;
-        if("priceAsc".equalsIgnoreCase(sort)) {
-            products=productModelFacade.getAllByOrderByPriceAsc();
-        }
-        else if("priceDesc".equalsIgnoreCase(sort)) {
-            products=productModelFacade.getAllByOrderByPriceDesc();
-        }
-        else {
-            products=productModelFacade.getAll();
-        }
+        List<ProductDTO> products=ProductUtils.getAllProductsBySort(sort,productModelFacade);
         model.addAttribute("products", products);
         return "allProducts";
     }
 
     @GetMapping("/category/{id}/products")
     public String getProductsByCategory(@PathVariable Long id, @RequestParam(required = false,name="sort") String sort, Model model) {
-        ProductCategoryDTO category=productCategoryFacade.getById(id);
-        if(category==null) {
-            model.addAttribute("errorMessage","NO CATEGORY FOUND !");
-        }
+        try {
+            ProductCategoryDTO category = productCategoryFacade.getById(id);
+            if (category == null) {
+                model.addAttribute("errorMessage", "NO CATEGORY FOUND !");
+            }
+
         else {
-            List<ProductDTO> products = productModelFacade.findByCategoryId(id);
-            if("priceAsc".equalsIgnoreCase(sort)) {
-                products=productModelFacade.getByCategoryOrderByPriceAsc(id);
-            }
-            else if("priceDesc".equalsIgnoreCase(sort)) {
-                products=productModelFacade.getByCategoryOrderByPriceDesc(id);
-            }
-            else {
-                products=productModelFacade.findByCategoryId(id);
-            }
+            List<ProductDTO> products = ProductUtils.getProductsBySort(id,sort,productModelFacade);
+
             if (products == null || products.isEmpty()) {
-                model.addAttribute("errorMessage", "NO PRODUCTS IN THIS CATEGORY !");
-                return "error";
+                throw new IllegalArgumentException("NO PRODUCTS IN THIS CATEGORY!");
+
             }
             model.addAttribute("products", products);
         }
         return "allProducts";
+    } catch (IllegalArgumentException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "error";
+        }
     }
 
     @GetMapping("/product/{id}/details")

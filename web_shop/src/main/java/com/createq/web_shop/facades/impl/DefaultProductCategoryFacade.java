@@ -29,7 +29,8 @@ public class DefaultProductCategoryFacade implements ProductCategoryFacade {
     public ProductCategoryDTO getById(Long id) {
     ProductCategoryModel productId=productCategorySerivce.getById(id);
     if(productId==null) {
-        return null;
+
+        throw new IllegalArgumentException("Product ID must be not null");
     }
     return productCategoryConverter.convert(productId);
     }

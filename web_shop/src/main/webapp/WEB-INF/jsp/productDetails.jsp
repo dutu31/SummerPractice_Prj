@@ -10,39 +10,37 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="product-details">
     <div class="product-info">
-        <h2>${product.title}</h2>
-        <p>${product.longDescription}</p>
-        <p><strong>Price:</strong> ${product.price} RON</p>
-        <p><strong>In stock:</strong> ${product.quantity}</p>
+        <div class="product-info-box">
+            <h2>${product.title}</h2>
+            <p class="product-description">${product.longDescription}</p>
 
-      <!--  <form id="addToCartForm"
-            data-id="${product.id}"
-            data-title="${product.title}"
-            data-price="${product.price}">
-            <input type="number" id="quantity" name="quantity" value="1" min="1" max="${product.quantity}">
-            <button type="submit" id="add-to-cart">Add to Cart</button>
-        </form>
+            <div class="price-section">
+                <p><strong>Price:</strong> <span class="price-value">${product.price} RON</span></p>
+                <p class="stock-info"><strong>In stock:</strong> ${product.quantity}</p>
+            </div>
+        </div>
 
-        <p id="cartMessage" class="cart-message"></p>
-        <a id="continueShopping" href="${pageContext.request.contextPath}/">Continue Shopping</a>   !-->
-
-        <div class="add-to-cart-form">
-            <input type="number" id="quantity" value="1" min="1" max="${product.quantity}">
-            <button type="button" id="add-to-cart"
+        <div class="add-to-cart-container">
+            <input type="number" class="quantity-input" id="quantity"
+                   value="1" min="1" max="${product.quantity}">
+            <button type="button" class="add-to-cart-button" id="add-to-cart"
                     data-id="${product.id}"
                     data-title="${product.title}"
                     data-price="${product.price}"
-                    data-image="${product.imageURL}">
+                    data-image="${product.imageURL}"
+                    data-stock="${product.quantity}">
                 Add to Cart
             </button>
         </div>
+
         <p id="cartMessage"></p>
 
+        <a id="continueShopping" href="${pageContext.request.contextPath}/">
+            <i class="fas fa-arrow-left"></i> Continue Shopping
+        </a>
+    </div>
 
     <div class="product-image">
         <img src="${product.imageURL}" alt="${product.title}">
     </div>
-</div>
-
-
 </div>
