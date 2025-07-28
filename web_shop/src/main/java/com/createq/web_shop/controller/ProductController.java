@@ -5,6 +5,7 @@ import com.createq.web_shop.dto.ProductDTO;
 import com.createq.web_shop.facades.ProductCategoryFacade;
 import com.createq.web_shop.facades.ProductFacade;
 import com.createq.web_shop.utils.ProductUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -60,13 +61,18 @@ public class ProductController {
     }
 
     @GetMapping("/product/{id}/details")
-    public String getProductDetails(@PathVariable Long id, Model model) {
+    public String getProductDetails(@PathVariable Long id, Model model, HttpServletRequest request) {
         ProductDTO product = productModelFacade.getById(id);
         if (product == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
         }
         model.addAttribute("product", product);
-        return "productDetails";
+        String requestedWith = request.getHeader("X-Requested-With");
+        if ("XMLHttpRequest".equals(requestedWith)) {
+            return "productDetails";
+        } else {
+            return "index";
+        }
     }
 
 

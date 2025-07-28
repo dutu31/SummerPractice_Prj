@@ -18,7 +18,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>Quick Phone</title>
 </head>
+
 <body>
+    <div id="intro-overlay" class="video-overlay">
+        <iframe
+            src="https://www.youtube.com/embed/eDqfg_LexCQ?autoplay=1&mute=1&controls=0&start=10"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen>
+        </iframe>
+    <button id="close-intro" class="video-overlay__button">See page</button>
+    </div>
+    <div id="main-content" class="site-content">
     <header>
         <h1>QuickPhone</h1>
         <nav>
@@ -47,6 +58,8 @@
 
         </nav>
     </header>
+        <div id="cart-banner-message" class="cart-banner-message"></div>
+
 
     <main id="content">
         <!-- this is where the products are shown !-->
@@ -55,6 +68,7 @@
     <footer>
         <p>&copy; QuickPhone 2025</p>
     </footer>
+    </div>
 
     <script type="text/javascript" src="${contextPath}/static/script/main.js"></script>
     <script type="text/javascript" src="${contextPath}/static/script/cart.js"></script>

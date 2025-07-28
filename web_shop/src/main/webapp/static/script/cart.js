@@ -37,6 +37,35 @@ const cartService=(function () {
         }
     }
 
+    function showBanner(message,type) {
+        const banner = document.getElementById('cart-banner-message');
+        if (banner) {
+            banner.textContent = message;
+
+            if (type === 'error') {
+                banner.style.backgroundColor = '#dc3545';
+            } else if (type === 'success') {
+                banner.style.backgroundColor = '#28a745';
+            } else {
+                banner.style.backgroundColor = '#333';
+            }
+
+            banner.style.display = 'block';
+            banner.style.opacity = '1';
+            banner.style.transform = 'translateY(0)';
+
+            setTimeout(function() {
+                banner.style.opacity = '0';
+                banner.style.transform = 'translateY(-20px)';
+            }, 2000);
+
+            setTimeout(function() {
+                banner.style.display = 'none';
+                banner.textContent = '';
+            }, 2500);
+        }
+    }
+
     function handleAddToCartClick(event) {
         const btn=event.target.closest('#add-to-cart');
         if(!btn) {
@@ -52,19 +81,21 @@ const cartService=(function () {
         const image=btn.dataset.image;
         const stock=parseInt(btn.dataset.stock);
 
-        if(quantity>stock) {
-            quantity=stock;
-            qtyInput.value=stock;
-            alert('Quantity required too high. Auto-adjusting...');
+
+        if (isNaN(quantity) || quantity < 1) {
+            showBanner("Invalid quantity request!",'error')
+            return;
+        }
+
+        if (quantity > stock) {
+            showBanner("Quantity required too high!",'error')
+            return;
         }
 
         const product = { id, title, price, quantity,stock,image };
         addToCart(product);
-        const message = document.getElementById('cartMessage');
-        if (message) {
-            message.textContent = `${title} added to cart (${quantity} pcs).`;
-            setTimeout(() => message.textContent = '', 2000);
-        }
+
+        showBanner(`${title} added to cart (${quantity} pcs).`,'success');
     }
 
     function addToCart(product) {
@@ -217,7 +248,7 @@ const cartService=(function () {
         renderCartPage();
         updateCartCount();
     }
-
+//TO DO: pop-up confirmation
 
     return {
         initCart: initCart
@@ -225,3 +256,6 @@ const cartService=(function () {
 })();
 window.cartService=cartService;
 document.addEventListener('DOMContentLoaded',cartService.initCart);
+
+
+

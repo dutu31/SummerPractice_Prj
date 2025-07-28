@@ -87,7 +87,11 @@ const categoryService = (function () {
 function fetchProductDetails(productId) {
     const url = `/product/${productId}/details`;
 
-    fetch(url)
+    fetch(url, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
         .then(response => {
             if (!response.ok) throw new Error("Product not found!");
             return response.text();
@@ -229,3 +233,23 @@ window.addEventListener('popstate', handlePopState);
     }
 })();
 document.addEventListener('DOMContentLoaded',categoryService.initPage);
+
+
+
+document.addEventListener('DOMContentLoaded', initIntroOverlay);
+
+function initIntroOverlay() {
+    const closeBtn = document.getElementById('close-intro');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeIntroOverlay);
+    }
+}
+
+function closeIntroOverlay() {
+    const overlay = document.getElementById('intro-overlay');
+    const main = document.getElementById('main-content');
+    if (overlay) overlay.parentNode.removeChild(overlay);
+    if (main)    main.style.display = 'block';
+}
+
+

@@ -17,6 +17,7 @@
     </div>
 
     <div class="cart-content">
+        <div class="cart-items-wrapper">
         <table id="cart-table" class="cart-table">
             <thead>
             <tr class="table-header">
@@ -33,6 +34,7 @@
             <!-- Items will be populated by JavaScript -->
             </tbody>
         </table>
+        </div>
 
         <div class="cart-summary">
             <div class="summary-card">
@@ -70,3 +72,14 @@
 
     <p id="cartMessage" class="cart-message"></p>
 </div>
+<!-- TO DO: confirmation pop-up !-->
+
+<!--<div id="confirm-modal" class="confirm-modal">
+    <div class="modal-box">
+        <p id="confirm-message">Are you sure?</p>
+        <div class="modal-buttons">
+            <button id="confirm-yes" class="modal-btn yes">Yes</button>
+            <button id="confirm-no" class="modal-btn no">No</button>
+        </div>
+    </div>
+</div>  !-->

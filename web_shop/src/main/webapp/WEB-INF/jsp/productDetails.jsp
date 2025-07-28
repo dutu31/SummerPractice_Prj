@@ -33,7 +33,6 @@
             </button>
         </div>
 
-        <p id="cartMessage"></p>
 
         <a id="continueShopping" href="${pageContext.request.contextPath}/">
             <i class="fas fa-arrow-left"></i> Continue Shopping
