@@ -75,8 +75,11 @@ nav {
 }
 
 .nav-right {
+    display: flex;
+    align-items: center;
     margin-left: 20px;
     flex-shrink: 0;
+    gap:20px;
 }
 
 .nav-right a {
