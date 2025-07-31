@@ -19,6 +19,9 @@ public class ProductConverter {
         if (product.getCategory() != null) {
             dto.setCategoryName(product.getCategory().getName());
         }
+        dto.setQuantity(product.getQuantity());
+        dto.setLongDescription(product.getLongDescription());
+        dto.setVideoURL(product.getVideoURL());
         return dto;
     }
 

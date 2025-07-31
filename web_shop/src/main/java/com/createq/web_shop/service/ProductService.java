@@ -7,4 +7,10 @@ import java.util.List;
 public interface ProductService {
     List<ProductModel> getAll();
     List<ProductModel> getByCategoryId(Long id);
+    List<ProductModel>findByCategoryOrderByPriceAsc(Long categoryId);
+    List<ProductModel>findByCategoryOrderByPriceDesc(Long categoryId);
+    ProductModel findById(Long id);
+    List<ProductModel> findAllByOrderByPriceAsc();
+    List<ProductModel> findAllByOrderByPriceDesc();
+
 }

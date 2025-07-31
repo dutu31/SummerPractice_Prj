@@ -20,6 +20,11 @@ public class DefaultProductCategoryService implements ProductCategoryService {
         return productCategoryRepository.findAll();
     }
 
+    @Override
+    public ProductCategoryModel getById(Long id) {
+        return productCategoryRepository.findById(id).orElse(null);
+    }
+
     public ProductCategoryRepository getProductCategoryRepository() {
         return productCategoryRepository;
     }

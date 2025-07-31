@@ -9,17 +9,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- TODO:sort by price implement !-->
 <div class="sort-container">
-    <label for="sortSelect">SortPrice</label>
+    <label for="sortSelect">SortPrice:</label>
+    <select id="sortSelect" name="sort">
+    <option value="">No sort</option>
+    <option value="priceDesc">Sort &#8595;</option>
+    <option value="priceAsc">Sort &#8593;</option>
+    </select>
 </div>
 <div class="products-grid">
-    <c:forEach items="${products}" var="product">
-            <div class="product-card">
-                <img src="${product.imageURL}" alt="${product.title}" width="200"/>
-                <div class="content">
-                <h2>${product.title}</h2>
-                <p class="description">${product.description}</p>
-                <p class="price">${product.price} RON </p>
+    <c:choose>
+    <c:when test="${not empty errorMessage}">
+        <h1>${errorMessage}</h1>
+    </c:when>
+        <c:otherwise>
+            <c:forEach items="${products}" var="product">
+                <div class="product-card">
+                    <img src="${product.imageURL}" alt="${product.title}" width="200"/>
+                    <div class="content">
+                        <a href="#" class="product-detail-link" data-id="${product.id}">
+                        <h2>${product.title}</h2>
+                        </a>
+                        <p class="description">${product.description}</p>
+                        <p class="price">${product.price} RON </p>
+                    </div>
                 </div>
-            </div>
-        </c:forEach>
+            </c:forEach>
+        </c:otherwise>
+    </c:choose>
+
 </div>

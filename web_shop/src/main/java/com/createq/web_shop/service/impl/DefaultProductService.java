@@ -30,4 +30,31 @@ public class DefaultProductService implements ProductService {
     public List<ProductModel> getByCategoryId(Long id) {
         return productRepository.findByCategoryId(id);
     }
+
+    @Override
+    public List<ProductModel> findByCategoryOrderByPriceAsc(Long categoryId) {
+        return productRepository.findByCategoryIdOrderByPriceAsc(categoryId);
+    }
+
+    @Override
+    public List<ProductModel> findByCategoryOrderByPriceDesc(Long categoryId) {
+        return productRepository.findByCategoryIdOrderByPriceDesc(categoryId);
+    }
+
+    @Override
+    public ProductModel findById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Product not found"));
+    }
+
+    @Override
+    public List<ProductModel> findAllByOrderByPriceAsc() {
+        return productRepository.findAllByOrderByPriceAsc();
+    }
+
+    @Override
+    public List<ProductModel> findAllByOrderByPriceDesc() {
+        return productRepository.findAllByOrderByPriceDesc();
+    }
+
 }

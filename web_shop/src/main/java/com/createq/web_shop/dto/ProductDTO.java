@@ -7,6 +7,9 @@ public class ProductDTO {
     private String imageURL;
     private double price;
     private String categoryName;
+    private int quantity;
+    private String longDescription;
+    private String videoURL;
 
     public long getId() {
         return id;
@@ -48,6 +51,14 @@ public class ProductDTO {
         this.price = price;
     }
 
+    public int getQuantity() { return quantity; }
+
+    public void setQuantity(int quantity) {this.quantity=quantity; }
+
+    public String getLongDescription() {return longDescription; }
+
+    public void setLongDescription(String longDescription) {this.longDescription=longDescription; }
+
     public String getCategoryName() {
         return categoryName;
     }
@@ -56,4 +67,11 @@ public class ProductDTO {
         this.categoryName=categoryName;
     }
 
+    public String getVideoURL() {
+        return videoURL;
+    }
+
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
+    }
 }

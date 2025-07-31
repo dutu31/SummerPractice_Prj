@@ -14,6 +14,10 @@ ProductModel {
     private String description;
     private double price;
     private String imageURL;
+    private String videoURL;
+    private int quantity;
+    @Column(length = 4000)
+    private String longDescription;
     @ManyToOne
     @JoinColumn(name="category_id")
     private ProductCategoryModel category;
@@ -64,5 +68,21 @@ ProductModel {
 
     public void setCategory(ProductCategoryModel category) {
         this.category = category;
+    }
+
+    public int getQuantity() { return quantity; }
+
+    public void setQuantity(int quantity) {this.quantity=quantity; }
+
+    public String getLongDescription() {return longDescription; }
+
+    public void setLongDescription(String description) {this.description=description; }
+
+    public String getVideoURL() {
+        return videoURL;
+    }
+
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
     }
 }
