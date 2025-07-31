@@ -13,6 +13,8 @@
     <link href="${contextPath}/static/css/main.css" rel="stylesheet" type="text/css">
     <link href="${contextPath}/static/css/productDetails.css" rel="stylesheet" type="text/css">
     <link href="${contextPath}/static/css/cart.css" rel="stylesheet" type="text/css">
+    <link href="${contextPath}/static/css/login.css" rel="stylesheet" type="text/css">
+    <link href="${contextPath}/static/css/register.css" rel="stylesheet" type="text/css">
     <!-- font and icons !-->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -54,6 +56,18 @@
                 </svg>
                 <span id="cart-count" style="margin-left: 5px;">0</span>
             </a>
+
+                <c:choose>
+                    <c:when test="${pageContext.request.userPrincipal != null}">
+                        <span class="nav-greeting">Hello ${pageContext.request.userPrincipal.name}!</span>
+                        <a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="#" class="nav-link" data-url="${pageContext.request.contextPath}/login">Login</a>
+                    </c:otherwise>
+                </c:choose>
+
+
             </div>
 
         </nav>
@@ -72,5 +86,7 @@
 
     <script type="text/javascript" src="${contextPath}/static/script/main.js"></script>
     <script type="text/javascript" src="${contextPath}/static/script/cart.js"></script>
+    <script type="text/javascript" src="${contextPath}/static/script/login.js"></script>
+    <script type="text/javascript" src="${contextPath}/static/script/register.js"></script>
 </body>
 </html>
