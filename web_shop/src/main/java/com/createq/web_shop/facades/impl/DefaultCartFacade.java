@@ -49,7 +49,7 @@ public class DefaultCartFacade implements CartFacade {
     @Override
     public CartDTO mergeCart(String username, List<CartItemDTO> items) {
         for (CartItemDTO dto : items) {
-            CartItem item = itemConverter.toEntity(dto, null); //cart set in service layer
+            CartItem item = itemConverter.toEntity(dto, null);
             cartService.addItem(username, item);
         }
         Cart updated = cartService.getCartForUsername(username);

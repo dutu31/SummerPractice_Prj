@@ -24,6 +24,9 @@ const loginService = (function() {
             });
     }
 
+
+
+
     function fetchRegisterContent() {
         fetch('/register/perform_register', {
             headers: {
@@ -83,7 +86,6 @@ const loginService = (function() {
     return {
         init: function() {
             initLoginLink();
-            // Initialize register link if we're already on login page
             if (window.location.pathname === '/login') {
                 initRegisterLink();
             }

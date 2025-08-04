@@ -142,13 +142,13 @@ const registerService = (function() {
         strengthBar = document.getElementById('strength-bar');
         strengthText = document.getElementById('strength-text');
 
-        // Initialize rule elements
+
         rules.length.element = document.getElementById('rule-length');
         rules.capital.element = document.getElementById('rule-capital');
         rules.digit.element = document.getElementById('rule-digit');
         rules.special.element = document.getElementById('rule-special');
 
-        // Add event listeners
+
         usernameInput.addEventListener('input', handleUsernameInput);
         passwordInput.addEventListener('input', handlePasswordInput);
         confirmInput.addEventListener('input', handleConfirmInput);

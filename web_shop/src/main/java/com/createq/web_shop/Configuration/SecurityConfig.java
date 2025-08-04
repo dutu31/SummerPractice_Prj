@@ -1,8 +1,9 @@
 package com.createq.web_shop.Configuration;
 
+import com.createq.web_shop.utils.DeniedHandler;
+import com.createq.web_shop.utils.SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,12 +15,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, SuccessHandler successHandler, DeniedHandler deniedHandler) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/perform_register").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers(
                                 "/",
                                 "/index",
@@ -44,7 +48,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/perform_login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(successHandler)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -60,12 +64,9 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 )
                 .exceptionHandling(exceptions -> exceptions
+                        .accessDeniedHandler(deniedHandler)
                         .authenticationEntryPoint((request, response, authException) -> {
-                            if (!request.getRequestURI().startsWith("/api")) {
-                                response.sendRedirect("/login");
-                            } else {
-                                response.sendError(HttpStatus.UNAUTHORIZED.value());
-                            }
+                            response.sendRedirect("/login");
                         })
                 );
 
@@ -76,4 +77,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+
 }

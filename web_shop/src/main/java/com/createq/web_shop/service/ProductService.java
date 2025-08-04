@@ -12,5 +12,7 @@ public interface ProductService {
     ProductModel findById(Long id);
     List<ProductModel> findAllByOrderByPriceAsc();
     List<ProductModel> findAllByOrderByPriceDesc();
+    public ProductModel save(ProductModel productModel);
+    public void deleteById(Long id);
 
 }

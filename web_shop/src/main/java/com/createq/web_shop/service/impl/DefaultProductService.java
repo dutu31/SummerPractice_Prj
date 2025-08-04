@@ -57,4 +57,14 @@ public class DefaultProductService implements ProductService {
         return productRepository.findAllByOrderByPriceDesc();
     }
 
+    @Override
+    public ProductModel save(ProductModel productModel) {
+        return productRepository.save(productModel);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
+    }
+
 }

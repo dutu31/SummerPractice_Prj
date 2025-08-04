@@ -248,10 +248,10 @@ const cartService=(function () {
         renderCartPage();
         updateCartCount();
     }
-//TO DO: pop-up confirmation
 
     return {
-        initCart: initCart
+        initCart: initCart,
+        showBanner:showBanner
     }
 })();
 window.cartService=cartService;

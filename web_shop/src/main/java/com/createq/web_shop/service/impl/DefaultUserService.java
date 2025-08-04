@@ -7,6 +7,8 @@ import com.createq.web_shop.repository.UserRepository;
 import com.createq.web_shop.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -63,8 +65,57 @@ public class DefaultUserService implements UserService {
 
     }
 
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateUserRole(Long id, String role) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setRole(role);
+            userRepository.save(user);
+        } else {
+            throw new UsernameNotFoundException("User not found with ID: " + id);
+        }
+    }
+
+    @Override
+    public User convertAndRegisterUser(UserDTO userDTO, String role) {
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already exists!");
+        }
+        if (userRepository.findByMail(userDTO.getMail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists!");
+        }
+
+        User user = userConverter.convert(userDTO);
+        user.setRole(role);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("Loading user: " + username);
+        User user = findByUsername(username);
+        System.out.println("User found: " + user.getUsername() + ", role: " + user.getRole());
+        String role="ROLE_" + user.getRole().toUpperCase();
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority(role))
+        );
+    }
 }
 
 

@@ -200,3 +200,47 @@
     background-color: #cccccc;
     cursor: not-allowed;
 }
+
+
+.nav-user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: #f3f3f3;
+    padding: 0.4rem 1rem;
+    border-radius: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nav-greeting {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-greeting i {
+    color: #4CAF50;
+    font-size: 18px;
+}
+
+.logout-link {
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-weight: 600;
+}
+
+.logout-link:hover {
+    color: #111;
+}
+
+.nav-user-info span:nth-child(2) {
+    color: #aaa;
+    font-weight: bold;
+}
+
+

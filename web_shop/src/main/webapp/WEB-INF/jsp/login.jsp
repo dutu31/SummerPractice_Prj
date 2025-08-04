@@ -11,7 +11,7 @@
 <div class="login-wrapper">
     <div class="login-card">
 
-        <form class="login-form" action="/perform_login" method="post">
+        <form class="login-form" action="/perform_login" method="post" id="loginForm">
             <div class="form-header">
                 <h2>Welcome Back</h2>
                 <p>Please enter your credentials to login</p>
