@@ -7,4 +7,5 @@ public interface CartService {
     Cart getCartForUsername(String username);
     void addItem(String username, CartItem item);
     void clearCart(String username);
+    void saveCart(Cart cart);
 }

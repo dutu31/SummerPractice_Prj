@@ -3,7 +3,6 @@ package com.createq.web_shop.converter;
 import com.createq.web_shop.dto.CartDTO;
 import com.createq.web_shop.dto.CartItemDTO;
 import com.createq.web_shop.model.Cart;
-import com.createq.web_shop.model.CartItem;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;

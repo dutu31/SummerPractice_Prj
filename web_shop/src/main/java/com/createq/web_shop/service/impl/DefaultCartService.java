@@ -1,6 +1,5 @@
 package com.createq.web_shop.service.impl;
 
-import com.createq.web_shop.dto.CartItemDTO;
 import com.createq.web_shop.model.Cart;
 import com.createq.web_shop.model.CartItem;
 import com.createq.web_shop.model.User;
@@ -48,12 +47,15 @@ public class DefaultCartService implements CartService {
 
         if (existing != null) {
             existing.setQuantity(existing.getQuantity() + item.getQuantity());
+            existing.setTitle(item.getTitle());
+            existing.setPrice(item.getPrice());
+            existing.setImageUrl(item.getImageUrl());
         } else {
             item.setCart(cart);
             cart.getItems().add(item);
         }
 
-        cartRepository.save(cart);
+        saveCart(cart);
 
     }
 
@@ -61,7 +63,12 @@ public class DefaultCartService implements CartService {
     public void clearCart(String username) {
         Cart cart = getCartForUsername(username);
         cart.getItems().clear();
-        cartRepository.save(cart);
+        saveCart(cart);
 
+    }
+
+    @Override
+    public void saveCart(Cart cart) {
+        cartRepository.save(cart);
     }
 }

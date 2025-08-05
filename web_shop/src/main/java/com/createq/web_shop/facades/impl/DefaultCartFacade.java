@@ -48,12 +48,28 @@ public class DefaultCartFacade implements CartFacade {
 
     @Override
     public CartDTO mergeCart(String username, List<CartItemDTO> items) {
+        Cart cart = cartService.getCartForUsername(username);
+
         for (CartItemDTO dto : items) {
-            CartItem item = itemConverter.toEntity(dto, null);
-            cartService.addItem(username, item);
+            CartItem existing = cart.getItems().stream()
+                    .filter(ci -> ci.getProductId().equals(dto.getProductId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existing != null) {
+                existing.setQuantity(existing.getQuantity() + dto.getQuantity());
+                existing.setTitle(dto.getTitle());
+                existing.setPrice(dto.getPrice());
+                existing.setImageUrl(dto.getImageUrl());
+            } else {
+                CartItem item = itemConverter.toEntity(dto, cart);
+                cart.getItems().add(item);
+            }
         }
-        Cart updated = cartService.getCartForUsername(username);
-        return cartConverter.convert(updated);
+
+        cartService.saveCart(cart);
+
+        return cartConverter.convert(cart);
     }
 
 

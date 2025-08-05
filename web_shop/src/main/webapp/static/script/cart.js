@@ -1,4 +1,13 @@
 const cartService=(function () {
+
+    let isAuthenticated=false;
+    function setAuthenticated(value) {
+        isAuthenticated = value;
+        if (isAuthenticated) {
+            mergeLocalCartToServer();
+        }
+    }
+
     function initCart() {
         initAddToCart();
         updateCartCount();
@@ -16,7 +25,7 @@ const cartService=(function () {
     }
 
     function loadCartFragment() {
-        fetch('/cart')
+        fetch('/cart/page')
             .then(function (response) {
                 return response.text();
             })
@@ -99,77 +108,122 @@ const cartService=(function () {
     }
 
     function addToCart(product) {
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        let existing = null;
-        for (let i = 0; i < cart.length; i++) {
-            if (cart[i].id === product.id) {
-                existing = cart[i];
-                break;
+        if (!isAuthenticated) {
+
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            let existing = cart.find(item => item.id === product.id);
+
+            if (existing) {
+                existing.quantity += product.quantity;
+            } else {
+                cart.push(product);
             }
-        }
 
-        if (existing) {
-            existing.quantity += product.quantity;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
         } else {
-            cart.push(product);
+            fetch('/cart/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    productId: product.id,
+                    title: product.title,
+                    price: product.price,
+                    quantity: product.quantity,
+                    imageUrl: product.image
+                })
+            }).then(res => {
+                if (res.ok) {
+                    updateCartCountFromServer();
+                }
+            });
         }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
     }
 
     function updateCartCount() {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let count = 0;
-        for (let i = 0; i < cart.length; i++) {
-            count += cart[i].quantity;
-        }
-        let countSpan = document.getElementById('cart-count');
-        if (countSpan) {
-            countSpan.textContent = count.toString();
+        if (!isAuthenticated) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            let count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const countSpan = document.getElementById('cart-count');
+            if (countSpan) countSpan.textContent = count.toString();
+        } else {
+            updateCartCountFromServer();
         }
     }
 
+    function updateCartCountFromServer() {
+        fetch('/cart')
+            .then(res => res.json())
+            .then(cartDTO => {
+                let count = 0;
+                if (cartDTO.items) {
+                    count = cartDTO.items.reduce((sum, item) => sum + item.quantity, 0);
+                }
+                const countSpan = document.getElementById('cart-count');
+                if (countSpan) countSpan.textContent = count.toString();
+            });
+    }
+
     function renderCartPage() {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (!isAuthenticated) {
+            renderLocalCart();
+        } else {
+            renderServerCart();
+        }
+    }
+
+    function renderLocalCart() {
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        renderCartItems(cart);
+    }
+
+    function renderServerCart() {
+        fetch('/cart')
+            .then(res => res.json())
+            .then(cartDTO => {
+                renderCartItems(cartDTO.items || []);
+            });
+    }
+
+    function renderCartItems(items) {
         let tbody = document.querySelector('#cart-table tbody');
         tbody.innerHTML = '';
         let total = 0;
 
-        for (let i = 0; i < cart.length; i++) {
-            let item = cart[i];
+        for (let item of items) {
+            const imgSrc=item.imageUrl || item.image;
             let row = document.createElement('tr');
-
             row.innerHTML =
-                "<td>" + "<a href='/product/" + item.id + "/details' class='product-link'>" +
-                "<img src='" + item.image + "' alt='" + item.title + "' width='50'></a></td>" +
-                "<td>" + item.title + "</td>" +
-                "<td>" + item.price + " RON</td>" +
-                "<td>" +
-                "<button class='decrease-btn' data-id='" + item.id + "'>-</button> " +
-                "<span class='item-qty'>" + item.quantity + "</span> " +
-                "<button class='increase-btn' data-id='" + item.id + "'>+</button>" +
-                "</td>" +
-                "<td>" + item.quantity + "</td>" +
-                "<td>" + (item.price * item.quantity) + " RON</td>" +
-                "<td><button class=\"remove-btn\" data-id=\"" + item.id + "\">Remove</button></td>";
+                `<td><a href='/product/${item.productId}/details' class='product-link'>
+                    <img src='${imgSrc}' alt='${item.title}' width='50'>
+                 </a></td>` +
+                `<td>${item.title}</td>` +
+                `<td>${item.price} RON</td>` +
+                `<td>
+                    <button class='decrease-btn' data-id='${item.productId}'>-</button> 
+                    <span class='item-qty'>${item.quantity}</span> 
+                    <button class='increase-btn' data-id='${item.productId}'>+</button>
+                 </td>` +
+                `<td>${item.quantity}</td>` +
+                `<td>${(item.price * item.quantity).toFixed(2)} RON</td>` +
+                `<td><button class="remove-btn" data-id="${item.productId}">Remove</button></td>`;
 
             tbody.appendChild(row);
             total += item.price * item.quantity;
         }
 
-        let totalEl = document.getElementById('cart-total');
-        if (totalEl) {
-            totalEl.textContent =  + total + " RON";
-        }
+        const totalEl = document.getElementById('cart-total');
+        if (totalEl) totalEl.textContent = total.toFixed(2) + " RON";
 
-        let deliveryFee=25;
-        let grandTotal=total+deliveryFee;
-        let grandTotalEl = document.getElementById('grand-total');
-        if (grandTotalEl) {
-            grandTotalEl.textContent = "TOTAL GENERAL: " + grandTotal.toFixed(2) + " RON";
-        }
+        const deliveryFee = 25;
+        const grandTotal = total + deliveryFee;
+        const grandTotalEl = document.getElementById('grand-total');
+        if (grandTotalEl) grandTotalEl.textContent = "TOTAL GENERAL: " + grandTotal.toFixed(2) + " RON";
 
+        attachCartEventHandlers();
+    }
+
+    function attachCartEventHandlers() {
         document.querySelectorAll('.increase-btn').forEach(btn => {
             btn.addEventListener('click', handleIncrease);
         });
@@ -178,17 +232,18 @@ const cartService=(function () {
             btn.addEventListener('click', handleDecrease);
         });
 
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', handleRemoveItem);
+        });
 
-        let removeButtons = document.querySelectorAll('.remove-btn');
-        for (let j = 0; j < removeButtons.length; j++) {
-            removeButtons[j].addEventListener('click', handleRemoveItem);
-        }
-
-        let clearBtn = document.getElementById('clear-cart');
+        const clearBtn = document.getElementById('clear-cart');
         if (clearBtn) {
+            clearBtn.removeEventListener('click', handleClearCart);
             clearBtn.addEventListener('click', handleClearCart);
         }
     }
+
+
 
     function handleRemoveItem(event) {
         const id = event.target.getAttribute('data-id');
@@ -196,24 +251,41 @@ const cartService=(function () {
     }
 
     function removeItem(id) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let newCart = [];
-
-        for (let i = 0; i < cart.length; i++) {
-            if (cart[i].id !== id) {
-                newCart.push(cart[i]);
-            }
+        if (!isAuthenticated) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderLocalCart();
+            updateCartCount();
+        } else {
+            fetch('/cart/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId: id })
+            }).then(res => {
+                if (res.ok) {
+                    renderServerCart();
+                    updateCartCountFromServer();
+                }
+            });
         }
-
-        localStorage.setItem('cart', JSON.stringify(newCart));
-        renderCartPage();
-        updateCartCount();
     }
 
     function handleClearCart() {
-        localStorage.removeItem('cart');
-        renderCartPage();
-        updateCartCount();
+        if (!isAuthenticated) {
+            localStorage.removeItem('cart');
+            renderLocalCart();
+            updateCartCount();
+        } else {
+            fetch('/cart/clear', {
+                method: 'POST'
+            }).then(res => {
+                if (res.ok) {
+                    renderServerCart();
+                    updateCartCountFromServer();
+                }
+            });
+        }
     }
 
 
@@ -228,31 +300,65 @@ const cartService=(function () {
     }
 
     function updateQuantity(id, delta) {     //delta is the difference that was added or extracted from a product quantity
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        for (let i = 0; i < cart.length; i++) {
-            if (cart[i].id === id) {
-                let newQty=cart[i].quantity +delta;
-                if (newQty > cart[i].stock) {
-                    newQty = cart[i].stock;
-                    alert(`Can't add more!`);
+        if (!isAuthenticated) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            for (let i = 0; i < cart.length; i++) {
+                if (cart[i].id === id) {
+                    let newQty = cart[i].quantity + delta;
+                    if (newQty <= 0) {
+                        cart.splice(i, 1);
+                    } else if (newQty <= cart[i].stock) {
+                        cart[i].quantity = newQty;
+                    } else {
+                        alert("Can't add more than stock!");
+                    }
+                    break;
                 }
-                if (newQty <= 0) {
-                    cart.splice(i, 1);
-                }else {
-                    cart[i].quantity=newQty;
-                }
-                break;
             }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderLocalCart();
+            updateCartCount();
+        } else {
+            //modify quantity with fetch
+            fetch('/cart/updateQuantity', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId: id, delta: delta })
+            }).then(res => {
+                if (res.ok) {
+                    renderServerCart();
+                    updateCartCountFromServer();
+                }
+            });
         }
-        localStorage.setItem('cart', JSON.stringify(cart));
-        renderCartPage();
-        updateCartCount();
+    }
+
+    function mergeLocalCartToServer() {
+        if (!isAuthenticated) return;
+
+        const localCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (localCart.length === 0) return;
+
+        fetch('/cart/merge', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(localCart)
+        }).then(res => {
+            if (res.ok) {
+                localStorage.removeItem('cart');
+                updateCartCountFromServer();
+                loadCartFragment();
+            }
+        });
     }
 
     return {
-        initCart: initCart,
-        showBanner:showBanner
-    }
+        initCart,
+        addToCart,
+        mergeLocalCartToServer,
+        setAuthenticated,
+        showBanner
+    };
 })();
 window.cartService=cartService;
 document.addEventListener('DOMContentLoaded',cartService.initCart);

@@ -83,6 +83,12 @@ const loginService = (function() {
         }
     }
 
+
+
+
+
+
+
     return {
         init: function() {
             initLoginLink();
@@ -94,6 +100,32 @@ const loginService = (function() {
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
+    fetch('/user/status')
+        .then(res => {
+
+            if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+
+
+            const contentType = res.headers.get("content-type") || "";
+            if (!contentType.includes("application/json")) {
+                throw new Error("Response is not JSON");
+            }
+            return res.json();
+        })
+        .then(data => {
+            const { authenticated = false } = data || {};
+            if (authenticated) {
+                window.cartService.setAuthenticated(true);
+                window.cartService.mergeLocalCartToServer();
+            } else {
+                window.cartService.setAuthenticated(false);
+            }
+        })
+        .catch(err => {
+            console.warn('Failed to check user status (handled):', err);
+            window.cartService.setAuthenticated(false);
+        });
+
     loginService.init();
     if (window.categoryService) {
         categoryService.initPage();

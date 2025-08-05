@@ -34,6 +34,7 @@ public class SecurityConfig {
                                 "/category/**",
                                 "/product/**",
                                 "/products/**",
+                                "/cart",
                                 "/cart/**",
                                 "/error",
                                 "/favicon.ico",
