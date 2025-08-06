@@ -6,6 +6,15 @@ public class CartItemDTO {
     private Double price;
     private Integer quantity;
     private String imageUrl;
+    private int delta;
+
+    public int getDelta() {
+        return delta;
+    }
+
+    public void setDelta(int delta) {
+        this.delta = delta;
+    }
 
     public CartItemDTO() {}
 

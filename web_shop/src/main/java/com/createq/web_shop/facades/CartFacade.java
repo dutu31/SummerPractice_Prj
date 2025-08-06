@@ -10,4 +10,7 @@ public interface CartFacade {
     CartDTO addItem(String username, CartItemDTO itemDTO);
     CartDTO clearCart(String username);
     CartDTO mergeCart(String username, List<CartItemDTO> items);
+    CartDTO updateQuantity(String username, Long productId, int delta);
+    CartDTO removeItem(String username, Long productId);
+
 }

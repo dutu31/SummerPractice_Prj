@@ -337,19 +337,34 @@ const cartService=(function () {
         if (!isAuthenticated) return;
 
         const localCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        console.log('Merging local cart items:', localCart);
         if (localCart.length === 0) return;
+
+        const cartDTOItems = localCart.map(item => ({
+            productId: Number(item.id),
+            title: item.title,
+            price: Number(item.price),
+            quantity: Number(item.quantity),
+            imageUrl: item.image
+        }));
 
         fetch('/cart/merge', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(localCart)
-        }).then(res => {
-            if (res.ok) {
-                localStorage.removeItem('cart');
-                updateCartCountFromServer();
-                loadCartFragment();
-            }
-        });
+            body: JSON.stringify(cartDTOItems)
+        })
+            .then(res => {
+                if (res.ok) {
+                    localStorage.removeItem('cart');
+                    updateCartCountFromServer();
+                    loadCartFragment(); //if deleted the redirect will be on the main page not cart page
+                } else {
+                    console.error('Merge cart failed with status:', res.status);
+                }
+            })
+            .catch(err => {
+                console.error('Error during merge cart:', err);
+            });
     }
 
     return {

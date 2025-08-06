@@ -57,7 +57,8 @@ public class DefaultCartFacade implements CartFacade {
                     .orElse(null);
 
             if (existing != null) {
-                existing.setQuantity(existing.getQuantity() + dto.getQuantity());
+                int maxQty = Math.max(existing.getQuantity(), dto.getQuantity()); //using max quantity between server and localDB to avoid duplication
+                existing.setQuantity(maxQty);
                 existing.setTitle(dto.getTitle());
                 existing.setPrice(dto.getPrice());
                 existing.setImageUrl(dto.getImageUrl());
@@ -69,6 +70,33 @@ public class DefaultCartFacade implements CartFacade {
 
         cartService.saveCart(cart);
 
+        return cartConverter.convert(cart);
+    }
+
+    @Override
+    public CartDTO updateQuantity(String username, Long productId, int delta) {
+        Cart cart = cartService.getCartForUsername(username);
+        CartItem existing = cart.getItems().stream()
+                .filter(ci -> ci.getProductId().equals(productId))
+                .findFirst()
+                .orElse(null);
+        if (existing != null) {
+            int newQty = existing.getQuantity() + delta;
+            if (newQty <= 0) {
+                cart.getItems().remove(existing);
+            } else {
+                existing.setQuantity(newQty);
+            }
+            cartService.saveCart(cart);
+        }
+        return cartConverter.convert(cart);
+    }
+
+    @Override
+    public CartDTO removeItem(String username, Long productId) {
+        Cart cart = cartService.getCartForUsername(username);
+        cart.getItems().removeIf(ci -> ci.getProductId().equals(productId));
+        cartService.saveCart(cart);
         return cartConverter.convert(cart);
     }
 

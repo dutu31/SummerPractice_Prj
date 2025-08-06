@@ -25,7 +25,7 @@ public class CartController {
     @ResponseBody
     public ResponseEntity<CartDTO> getCart(Principal principal) {
         if (principal == null) {
-            return ResponseEntity.ok(new CartDTO()); // empty cart for non users
+            return ResponseEntity.ok(new CartDTO()); // empty cart for nonusers
         }
         CartDTO cartDTO = cartFacade.getCart(principal.getName());
         return ResponseEntity.ok(cartDTO);
@@ -44,6 +44,8 @@ public class CartController {
     @PostMapping("/merge")
     @ResponseBody
     public ResponseEntity<CartDTO> mergeCart(@RequestBody List<CartItemDTO> items, Principal principal) {
+        System.out.println("Received items for merge:");
+        items.forEach(item -> System.out.println("ProductId: " + item.getProductId() + ", quantity: " + item.getQuantity()));
         if (principal == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -60,6 +62,27 @@ public class CartController {
         CartDTO empty = cartFacade.clearCart(principal.getName());
         return ResponseEntity.ok(empty);
     }
+
+    @PostMapping("/updateQuantity")
+    @ResponseBody
+    public ResponseEntity<CartDTO> updateQuantity(@RequestBody CartItemDTO request, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        CartDTO updated = cartFacade.updateQuantity(principal.getName(), request.getProductId(), request.getDelta());
+        return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping("/remove")
+    @ResponseBody
+    public ResponseEntity<CartDTO> removeItem(@RequestBody CartItemDTO itemDTO, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        CartDTO updated = cartFacade.removeItem(principal.getName(), itemDTO.getProductId());
+        return ResponseEntity.ok(updated);
+    }
+
 
     @GetMapping("/page")
     public String getCartPage() {
