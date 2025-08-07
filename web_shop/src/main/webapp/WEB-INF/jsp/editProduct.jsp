@@ -18,6 +18,6 @@
             <input type="number" id="input-product-quantity" value="${product.quantity}" required />
         </label>
         <button type="submit" class="admin-button admin-button-submit">Save Changes</button>
-        <a href="${contextPath}/admin" class="admin-button btn-back-admin">Back to Products List</a>
+        <a href="${contextPath}/admin" class="admin-button btn-back-admin" id="btn-back-admin">Back to Products List</a>
     </form>
 </div>

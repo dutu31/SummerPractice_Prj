@@ -44,6 +44,6 @@
         Add Product
     </button>
 
-    <a href="${pageContext.request.contextPath}/" class="admin-button btn-back-home-admin">Back to homepage</a>
+    <a href="${pageContext.request.contextPath}/admin" class="admin-button btn-back-admin" id="btn-back-add-product">Back to products</a>
 </div>
 

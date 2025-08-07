@@ -33,6 +33,7 @@ const adminModule = (function () {
         attachDeleteProductHandler();
         attachInitAddProductHandler();
         attachEditProductHandlers();
+        attachBackToAdminHandler();
     }
 
     function attachAddUserHandler() {
@@ -147,6 +148,7 @@ const adminModule = (function () {
             .then(function (html) {
                 updateMainContent(html);
                 attachAddProductHandler();
+                attachBackToAdminHandler();
             })
             .catch(function (error) {
                 cartService.showBanner("Error: " + error.message, "error");
@@ -217,12 +219,13 @@ const adminModule = (function () {
     function loadEditProductPage(productId) {
         fetch(`/admin/product/edit/${productId}`)
             .then(response => {
-                if (!response.ok) throw new Error("Nu s-a putut încărca pagina de editare");
+                if (!response.ok) throw new Error("Can't load edit page");
                 return response.text();
             })
             .then(html => {
                 updateMainContent(html);
                 attachEditProductFormHandler();
+                attachBackToAdminHandler();
             })
             .catch(err => {
                 cartService.showBanner("Error: " + err.message, "error");
@@ -240,7 +243,7 @@ const adminModule = (function () {
             const quantity = parseInt(document.getElementById("input-product-quantity").value);
 
             if (isNaN(price) || isNaN(quantity)) {
-                cartService.showBanner("Completează corect prețul și cantitatea!", "error");
+                cartService.showBanner("Use valid price and quantity", "error");
                 return;
             }
 
@@ -254,12 +257,12 @@ const adminModule = (function () {
             })
                 .then(response => {
                     if (!response.ok) {
-                        return response.json().then(err => { throw new Error(err.message || "Eroare la salvare."); });
+                        return response.json().then(err => { throw new Error(err.message || "Save error"); });
                     }
                     return response.json();
                 })
                 .then(() => {
-                    cartService.showBanner("Produs actualizat cu succes!", "success");
+                    cartService.showBanner("Product successfully updated", "success");
                     adminModule.loadAdminPage();
                 })
                 .catch(err => {
@@ -300,7 +303,7 @@ const adminModule = (function () {
                 throw new Error(error.message || "Delete error");
             });
         } else {
-            cartService.showBanner("Producted deleted!", "success");
+            cartService.showBanner("Products deleted!", "success");
             adminModule.loadAdminPage();
         }
     }
@@ -310,6 +313,16 @@ const adminModule = (function () {
     }
 
 
+
+    function attachBackToAdminHandler() {
+        const backBtns = document.querySelectorAll('#btn-back-admin, #btn-back-add-product');
+        backBtns.forEach(backBtn => {
+            backBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                loadAdminPage();
+            });
+        });
+    }
 
 
 
