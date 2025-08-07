@@ -13,4 +13,8 @@ public interface ProductFacade {
     ProductDTO getById(Long id);
     List<ProductDTO>getAllByOrderByPriceAsc();
     List<ProductDTO>getAllByOrderByPriceDesc();
+    ProductDTO addProduct(ProductDTO productDTO);
+    public void deleteProduct(Long id);
+    public void updateProductPriceAndQuantity(Long id, double price, Integer quantity);
+
 }
