@@ -1,9 +1,11 @@
 const cartService=(function () {
 
     let isAuthenticated=false;
+    let cartMerged=false;
     function setAuthenticated(value) {
         isAuthenticated = value;
-        if (isAuthenticated) {
+        if (isAuthenticated && !cartMerged) {
+            cartMerged=true;
             mergeLocalCartToServer();
         }
     }

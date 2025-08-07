@@ -128,6 +128,7 @@ const registerService = (function() {
     function handleFormSubmit(event) {
         if (registerBtn.disabled) {
             event.preventDefault();
+
         }
     }
 
@@ -183,4 +184,5 @@ const registerService = (function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     registerService.init();
+
 });

@@ -14,5 +14,5 @@ public interface ProductService {
     List<ProductModel> findAllByOrderByPriceDesc();
     public ProductModel save(ProductModel productModel);
     public void deleteById(Long id);
-
+    public void updateProductPriceAndQuantity(Long id, Double price, Integer quantity);
 }

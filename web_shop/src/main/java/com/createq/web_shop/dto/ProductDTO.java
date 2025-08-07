@@ -10,6 +10,15 @@ public class ProductDTO {
     private int quantity;
     private String longDescription;
     private String videoURL;
+    private Long categoryId;
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public long getId() {
         return id;

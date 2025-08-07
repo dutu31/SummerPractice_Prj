@@ -18,6 +18,7 @@ const loginService = (function() {
                 }, null, '/login');
                 document.title = 'Quick Phone - Login';
                 initRegisterLink();
+                attachLoginButtonHandler();
             })
             .catch(function(error) {
                 console.error('Error loading login page:', error);
@@ -49,6 +50,7 @@ const loginService = (function() {
                     if (window.registerService) {
                         registerService.init();
                     }
+                    attachLoginButtonHandler();
                 } else {
                     window.location.href = '/register/perform_register';
                 }
@@ -84,6 +86,15 @@ const loginService = (function() {
     }
 
 
+    function attachLoginButtonHandler() {
+        const loginBtn = document.querySelector('.btn-login');
+        if (!loginBtn) return;
+
+        loginBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            fetchLoginContent();
+        });
+    }
 
 
 
@@ -92,6 +103,7 @@ const loginService = (function() {
     return {
         init: function() {
             initLoginLink();
+            attachLoginButtonHandler();
             if (window.location.pathname === '/login') {
                 initRegisterLink();
             }
@@ -116,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const { authenticated = false } = data || {};
             if (authenticated) {
                 window.cartService.setAuthenticated(true);
-                window.cartService.mergeLocalCartToServer();
             } else {
                 window.cartService.setAuthenticated(false);
             }

@@ -7,11 +7,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!-- TODO:sort by price implement !-->
 <div class="sort-container">
     <label for="sortSelect">SortPrice:</label>
     <select id="sortSelect" name="sort">
-    <option value="">No sort</option>
+    <option value="">Sort by popularity</option>
     <option value="priceDesc">Sort &#8595;</option>
     <option value="priceAsc">Sort &#8593;</option>
     </select>

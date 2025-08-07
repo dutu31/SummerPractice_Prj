@@ -76,7 +76,7 @@ ProductModel {
 
     public String getLongDescription() {return longDescription; }
 
-    public void setLongDescription(String description) {this.description=description; }
+    public void setLongDescription(String longDescription) {this.longDescription=longDescription; }
 
     public String getVideoURL() {
         return videoURL;

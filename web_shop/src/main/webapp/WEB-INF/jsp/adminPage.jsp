@@ -64,6 +64,47 @@
         </table>
     </section>
 
+
+    <section class="admin-section admin-products-list-section">
+        <h3 class="admin-subtitle">Products List</h3>
+        <button type="button" id="go-to-add-product" class="add-to-cart-button">
+            Add New Product
+        </button>
+        <table id="admin-product-table" class="admin-table" border="1">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${products}" var="product">
+                <tr data-product-id="${product.id}">
+                    <td>${product.id}</td>
+                    <td>${product.title}</td>
+                    <td>${product.price}</td>
+                    <td>${product.quantity}</td>
+                    <td>${product.categoryName}</td>
+                    <td>
+                        <button class="edit-product-button" data-id="${product.id}">Edit</button>
+                        <button class="delete-product-button" data-id="${product.id}">Delete</button>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+
+
+    </section>
+
+
+
+
+
     <a href="${pageContext.request.contextPath}/" class="admin-button btn-back-home-admin">Back to homepage</a>
 
 </div>
