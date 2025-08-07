@@ -22,7 +22,7 @@ public class ProductCategoryController {
     }
 
     @GetMapping("/")
-    public String getAll(Model model) {
+    public String getAll(Model model) {System.out.println(">>>>> controller for index.jsp used");
         List<ProductCategoryDTO> categories = productCategoryFacade.getAll();
         if (categories == null || categories.isEmpty()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404), "No categories found");

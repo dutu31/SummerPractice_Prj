@@ -11,6 +11,7 @@ const categoryService = (function () {
         if (window.cartService && typeof cartService.initCart === 'function') {
             cartService.initCart();
         }
+        initAdminLink();
         const path = window.location.pathname;
         if (path.startsWith('/product/')) {
             const productId = path.split('/')[2];
@@ -191,18 +192,25 @@ function clearActiveCategory() {
 }
 
     function handlePopState(event) {
-        if (event.state &&event.state.html) {
+        if (event.state && event.state.html) {
             updateMainContent(event.state.html);
 
             if (event.state.type === 'category') {
                 updateActiveCategory(event.state.categoryId);
-                if (event.state.sortOrder && document.getElementById('sortSelect')) {
-                    document.getElementById('sortSelect').value = event.state.sortOrder;
+
+                const sortSelect = document.getElementById('sortSelect');
+                if (event.state.sortOrder && sortSelect) {
+                    sortSelect.value = event.state.sortOrder;
                 }
             } else if (event.state.type === 'product') {
                 document.querySelectorAll('.category-link').forEach(link => {
                     link.classList.remove('active');
                 });
+                initProductLinks();
+            } else if (event.state.type === 'admin') {
+                if (window.adminModule && typeof adminModule.init === 'function') {
+                    adminModule.init();
+                }
             }
 
             initProductLinks();
@@ -219,10 +227,41 @@ function clearActiveCategory() {
                 fetchProductsByCategory(categoryId, sortOrder);
             } else if (path === "/products") {
                 fetchProductsByCategory("ALL",sortOrder);
-            } else {
+            }
+            else {
                 selectDefaultCategory(document.querySelectorAll('.category-link'));
             }
         }
+    }
+
+    function initAdminLink() {
+        const adminLink = document.getElementById('admin-link');
+        if (!adminLink) return;
+
+        adminLink.addEventListener('click', handleAdminClick);
+    }
+
+    function handleAdminClick(event) {
+        event.preventDefault();
+
+        fetch('/admin')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Eroare la încărcarea paginii de administrare');
+                }
+                return response.text();
+            })
+            .then(html => {
+                updateMainContent(html);
+                if (window.adminModule && typeof adminModule.init === 'function') {
+                    adminModule.init();
+                }
+                history.pushState({ type: 'admin', html }, null, '/admin');
+            })
+            .catch(error => {
+                console.error('Eroare la încărcare admin:', error);
+                updateMainContent(`<p style="color:red">${error.message}</p>`);
+            });
     }
 
 window.addEventListener('popstate', handlePopState);

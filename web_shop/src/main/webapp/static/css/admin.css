@@ -1,0 +1,175 @@
+#admin-page {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #222;
+}
+
+.admin-title {
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    color: #1e293b;
+    font-weight: 700;
+    text-align: center;
+}
+
+.admin-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+    color: #334155;
+    font-weight: 600;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 6px;
+}
+
+.admin-section {
+    margin-bottom: 40px;
+}
+
+/* Container fără form, acum div simplu pentru inputuri */
+.admin-add-user-section > div.inputs-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 8px #e0e7ff;
+}
+
+.admin-label {
+    flex: 1 1 200px;
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #475569;
+}
+
+.admin-input,
+.admin-select {
+    margin-top: 6px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.admin-input:focus,
+.admin-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 8px rgba(59,130,246,0.4);
+}
+
+/* Butonul de Add - normal, nu în form */
+.admin-button-submit {
+    align-self: flex-end;
+    padding: 10px 24px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: auto; /* dacă e în flex container */
+}
+
+.admin-button-submit:hover {
+    background-color: #2563eb;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.admin-table-head th {
+    background-color: #3b82f6;
+    color: white;
+    text-align: left;
+    padding: 14px 20px;
+    font-weight: 700;
+    font-size: 1rem;
+    user-select: none;
+}
+
+.admin-table-body .admin-table-row {
+    background-color: #f1f5f9;
+    transition: background-color 0.25s ease;
+}
+
+.admin-table-body .admin-table-row:hover {
+    background-color: #e0e7ff;
+}
+
+.admin-table-cell {
+    padding: 14px 20px;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.admin-actions-cell {
+    white-space: nowrap;
+}
+
+/* Butoane Delete si Promote ca butoane normale */
+.admin-button.delete-user,
+.admin-button.promote-user {
+    margin-right: 8px;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    transition: background-color 0.25s ease;
+    display: inline-block;
+    user-select: none;
+}
+
+.admin-button.delete-user {
+    background-color: #ef4444;
+}
+
+.admin-button.delete-user:hover {
+    background-color: #b91c1c;
+}
+
+.admin-button.promote-user {
+    background-color: #10b981;
+}
+
+.admin-button.promote-user:hover {
+    background-color: #047857;
+}
+
+.btn-back-home-admin {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 28px;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 700;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.btn-back-home-admin:hover {
+    background-color: #2563eb;
+}
