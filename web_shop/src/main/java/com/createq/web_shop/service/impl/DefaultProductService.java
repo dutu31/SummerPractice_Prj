@@ -3,6 +3,7 @@ package com.createq.web_shop.service.impl;
 import com.createq.web_shop.model.ProductModel;
 import com.createq.web_shop.repository.ProductRepository;
 import com.createq.web_shop.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +65,19 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public void deleteById(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("Product not found with id: " + id);
+        }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateProductPriceAndQuantity(Long id, Double price, Integer quantity) {
+        ProductModel product=productRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("Product not found"));
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        productRepository.save(product);
     }
 
 }

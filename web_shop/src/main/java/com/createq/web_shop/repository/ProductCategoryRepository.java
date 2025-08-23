@@ -4,5 +4,8 @@ import com.createq.web_shop.model.ProductCategoryModel;
 import com.createq.web_shop.model.ProductModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface ProductCategoryRepository extends JpaRepository<ProductCategoryModel, Long> {
+    Optional<ProductCategoryModel> findByName(String name);
 }

@@ -60,6 +60,23 @@ public class DefaultProductFacade implements ProductFacade {
         return productConverter.convertAll(products);
     }
 
+    @Override
+    public ProductDTO addProduct(ProductDTO productDTO) {
+        ProductModel model = productConverter.convert(productDTO);
+        ProductModel savedModel = productService.save(model);
+        return productConverter.convert(savedModel);
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        productService.deleteById(id);
+    }
+
+    @Override
+    public void updateProductPriceAndQuantity(Long id, double price, Integer quantity) {
+        productService.updateProductPriceAndQuantity(id,price,quantity);
+    }
+
 
     public ProductService getProductService() {
         return productService;

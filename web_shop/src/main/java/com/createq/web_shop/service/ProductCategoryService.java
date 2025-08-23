@@ -7,4 +7,5 @@ import java.util.List;
 public interface ProductCategoryService {
 List<ProductCategoryModel> getAll();
 ProductCategoryModel getById(Long id);
+    ProductCategoryModel findByName(String name);
 }

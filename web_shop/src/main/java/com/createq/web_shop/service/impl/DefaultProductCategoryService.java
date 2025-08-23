@@ -25,6 +25,12 @@ public class DefaultProductCategoryService implements ProductCategoryService {
         return productCategoryRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public ProductCategoryModel findByName(String name) {
+        return productCategoryRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Category not found: " + name));
+    }
+
     public ProductCategoryRepository getProductCategoryRepository() {
         return productCategoryRepository;
     }

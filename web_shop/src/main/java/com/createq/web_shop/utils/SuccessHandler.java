@@ -22,7 +22,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
             String role = authority.getAuthority();
 
             if (role.equals("ROLE_ADMIN")) {
-                redirectUrl = "/admin";
+                redirectUrl = "/";  //should be /admin but for now we redirect to main page
                 break;
             } else if (role.equals("ROLE_USER")) {
                 redirectUrl = "/";
